@@ -18,6 +18,7 @@ import TabBarItem from "./components/common/TabBarItem";
 import Search from "./containers/Search";
 import BookExercise from "./containers/BookExercise";
 import Test from "./containers/Test";
+import HistoryTest from "./containers/HistoryTest";
 
 const BankIcon = require('./images/main/questions_bank.png');
 const BankSelectedIcon = require('./images/main/questions_bank_selected.png');
@@ -135,6 +136,7 @@ const AppNavigator = StackNavigator(
     Login: {screen: Login},
     BookExercise: {screen: BookExercise},
     Test:{screen:Test},
+    HistoryTest:{screen:HistoryTest},
   },
   {
     headerMode: 'none',

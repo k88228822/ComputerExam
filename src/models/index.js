@@ -9,6 +9,7 @@ import search from "./search";
 import account from "./account";
 import bookExercise from "./bookExercise";
 import test from "./test";
+import historyTest from "./historyTest";
 
 export default models = [
   router,
@@ -18,4 +19,5 @@ export default models = [
   account,
   bookExercise,
   test,
+  historyTest,
 ]

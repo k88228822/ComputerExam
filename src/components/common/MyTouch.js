@@ -11,9 +11,7 @@ function MyTouch(props) {
       style={{backgroundColor: '#ffffff'}}
       underlayColor={props.underlayColor}
       activeOpaciy={props.activeOpacity}
-      onPress={() => {
-        props.onPress()
-      }}
+      onPress={() => {props.onPress()}}
     >
       <View style={props.style}>
         {props.children}

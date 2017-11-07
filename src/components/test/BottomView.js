@@ -2,81 +2,93 @@
  * Created by wangzhen on 2017/10/31.
  */
 import React from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {DeviceEventEmitter,Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import PropTypes from 'prop-types';
 import ScreenSize from "../../utils/index";
 import MyTouch from "../common/MyTouch";
 
-function BottomView(props) {
-  return (
-    <View>
-      <View style={{backgroundColor: '#eef1f6', height: 1}}/>
+class BottomView extends React.Component{
 
-      <View style={styles.bottomImgContainer}>
-        <MyTouch style={styles.touchStyle} onPress={() => {
-          props.goPrePage();
-        }}>
-          <Image style={styles.bottomImg} source={require('../../images/test/pre.png')}/>
-        </MyTouch>
+  static propTypes={
+    goPrePage:PropTypes.func ,
+    onAnswerCardPress:PropTypes.func,
+    onCollectPress:PropTypes.func,
+    onAnswerPress:PropTypes.func,
+    goNextPage:PropTypes.func,
+    showAnswer:PropTypes.bool,
+    isCollected:PropTypes.bool,
+  }
 
-        <MyTouch  style={styles.touchStyle} onPress={() => {
-          props.onAnswerCardPress();
-        }}>
-          <Image style={styles.bottomImg} source={require('../../images/test/answerCard.png')}/>
-        </MyTouch>
+  static defaultProps={
+    goPrePage:()=>{},
+    onAnswerCardPress:()=>{},
+    onCollectPress:()=>{},
+    onAnswerPress:()=>{},
+    goNextPage:()=>{},
+    showAnswer:false,
+    isCollected:false,
+  }
 
-        <MyTouch style={styles.touchStyle} onPress={() => {
-          props.onCollectPress();
-        }}>
-          <Image style={styles.bottomImg} source={
-            props.isCollected ?
-              require('../../images/test/collect_selected.png') :
-              require('../../images/test/collect.png')
-          }
-          />
-        </MyTouch>
+  componentWillUnmount(){
+    this.subscription.remove();
+  }
 
-        <MyTouch style={styles.touchStyle} onPress={() => {
-          props.onAnswerPress();
-        }}>
-          <Image
-            style={styles.bottomImg}
-            source={props.showAnswer ?
-              require('../../images/test/answer_selected.png') :
-              require('../../images/test/answer.png')}
-          />
-        </MyTouch>
+  componentDidMount(){
+    this.subscription = DeviceEventEmitter.addListener('goPage',(data)=>{
+      console.log('hello,change:'+data)
+    })
+  }
 
-        <MyTouch style={styles.touchStyle} onPress={() => {
-          props.goNextPage();
-        }}>
-          <Image style={styles.bottomImg} source={require('../../images/test/next.png')}/>
-        </MyTouch>
+  render(){
+    return (
+      <View>
+        <View style={{backgroundColor: '#eef1f6', height: 1}}/>
+
+        <View style={styles.bottomImgContainer}>
+
+          <MyTouch style={styles.touchStyle} onPress={() => {
+            this.props.goPrePage();
+          }}>
+            <Image style={styles.bottomImg} source={require('../../images/test/pre.png')}/>
+          </MyTouch>
+
+          <MyTouch  style={styles.touchStyle} onPress={() => {
+            this.props.onAnswerCardPress();
+          }}>
+            <Image style={styles.bottomImg} source={require('../../images/test/answerCard.png')}/>
+          </MyTouch>
+
+          <MyTouch style={styles.touchStyle} onPress={() => {this.props.onCollectPress();}}>
+            <Image style={styles.bottomImg} source={
+              this.props.isCollected ?
+                require('../../images/test/collect_selected.png') :
+                require('../../images/test/collect.png')
+            }
+            />
+          </MyTouch>
+
+          <MyTouch style={styles.touchStyle} onPress={() => {
+            this.props.onAnswerPress();
+          }}>
+            <Image
+              style={styles.bottomImg}
+              source={this.props.showAnswer ?
+                require('../../images/test/answer_selected.png') :
+                require('../../images/test/answer.png')}
+            />
+          </MyTouch>
+
+          <MyTouch style={styles.touchStyle} onPress={() => {this.props.goNextPage();}}>
+            <Image style={styles.bottomImg} source={require('../../images/test/next.png')}/>
+          </MyTouch>
+
+        </View>
 
       </View>
-
-    </View>
-  );
+    );
+  }
 }
 
-BottomView.propTypes={
-  goPrePage:PropTypes.func ,
-  onAnswerCardPress:PropTypes.func,
-  onCollectPress:PropTypes.func,
-  onAnswerPress:PropTypes.func,
-  goNextPage:PropTypes.func,
-  showAnswer:PropTypes.bool,
-  isCollected:PropTypes.bool,
-}
-BottomView.defaultProps={
-  goPrePage:()=>{},
-  onAnswerCardPress:()=>{},
-  onCollectPress:()=>{},
-  onAnswerPress:()=>{},
-  goNextPage:()=>{},
-  showAnswer:false,
-  isCollected:false,
-}
 
 const styles=StyleSheet.create({
   bottomContainer:{

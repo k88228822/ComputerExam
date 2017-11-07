@@ -37,6 +37,7 @@ export default {
         ...state,
         showAnswer: false,
         modelVisible: false,
+        currentNum:1,
       }
     },
     itemSelected(state, {payload}){
@@ -45,6 +46,37 @@ export default {
         data: payload.data,
         showAnswer: true,
         dataSource: payload.dataSource
+      }
+    },
+    pageChange(state, {payload}){
+      return {
+        ...state,
+        type: payload.type,
+        currentNum: payload.currentNum,
+        showAnswer: payload.showAnswer,
+        isCollected: payload.isCollected,
+      }
+    },
+    setAnswerCard(state,{payload}){
+      return{
+        ...state,
+        modelVisible:payload.modelVisible
+      }
+    },
+    changeCollectStatus(state, {payload}){
+      return {
+        ...state,
+        isCollected: payload.isCollected
+      }
+    },
+    answerPress(state, {payload}){
+      let data = state.data;
+      data.array[state.currentNum - 1].showAnswer = !data.array[state.currentNum - 1].showAnswer;
+      return {
+        ...state,
+        data: data,
+        showAnswer: !state.showAnswer,
+        dataSource: data.array,
       }
     },
   },
@@ -74,7 +106,31 @@ export default {
         yield call(testServices.writeToWrong, {id, title, type, content});
       }
     },
-
+    *onPageChanged({payload}, {select, call, put}){
+      let test = yield select(state => state.test);
+      let type;
+      if (payload.index < test.data.one) {
+        type = '单选题';
+      } else if (payload.index < (test.data.two + test.data.one)) {
+        type = '填空题';
+      } else {
+        type = '操作题';
+      }
+      let isCollected = yield call(testServices.isCollected, {data: test.data, index: payload.index})
+      yield put(createAction('pageChange')({
+        type,
+        currentNum: (payload.index + 1),
+        showAnswer: test.data.array[payload.index].showAnswer,
+        isCollected,
+      }))
+    },
+    *onCollectPress({payload}, {select, call, put}){
+      let temp = yield select(state => state.test);
+      let data = temp.data.array[temp.currentNum - 1];
+      let {id, title, type} = data;
+      yield put(createAction('changeCollectStatus')({isCollected: !temp.isCollected}))
+      yield call(testServices.setCollectSubjeact, {id, title, type, data})
+    },
 
 
    }

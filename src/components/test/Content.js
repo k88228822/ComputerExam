@@ -1,15 +1,20 @@
 import React from 'react';
-import {View} from "react-native";
+import { View} from "react-native";
 import PropTypes from 'prop-types'
 import Page from "./Page";
 
 var ScrollableTabView = require('react-native-scrollable-tab-view');
 
+
 class Content extends React.Component {
   static propTypes = {
     onPageChanged: PropTypes.func.isRequired,
-    onItemClick:PropTypes.func.isRequired,
-    dataSource:PropTypes.array.isRequired,
+    onItemClick: PropTypes.func.isRequired,
+    dataSource: PropTypes.array.isRequired,
+    pageNum: PropTypes.number
+  }
+  static defaultProps = {
+    pageNum: 0,
   }
 
   // 构造
@@ -17,9 +22,11 @@ class Content extends React.Component {
     super(props);
     // 初始状态
     this.state = {};
+    this.renderPage=this.renderPage.bind(this);
+    this.goToPage=this.goToPage.bind(this);
   }
 
-  renderPage(item,index) {
+  renderPage(item, index) {
     return (
       <Page
         key={index}
@@ -29,10 +36,14 @@ class Content extends React.Component {
     )
   }
 
+  goToPage(pageNum){
+    this.scrollView.goToPage(pageNum);
+  }
+
   render() {
     return (
       <ScrollableTabView
-        ref={(tabView) => {this.tabView = tabView;}}
+        ref={e => this.scrollView = e}
         onChangeTab={({i, ref, from}) => {
           this.props.onPageChanged(i)
         }}
@@ -40,7 +51,9 @@ class Content extends React.Component {
         scrollWithoutAnimation={true}
         tabBarUnderlineStyle={{height: 1}}
         prerenderingSiblingsNumber={2}
-        renderTabBar={() => {return (<View></View>)}}
+        renderTabBar={() => {
+          return (<View></View>)
+        }}
       >
         {
           this.props.dataSource.map((data, index) => {

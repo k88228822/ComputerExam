@@ -55,7 +55,7 @@ class Home extends Component {
         break;
       case 1://历年真题汇总
         this.props.navigation.navigate(
-          'History', {
+          'HistoryTest', {
             isSubject: true,
           }
         );

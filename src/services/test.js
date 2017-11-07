@@ -28,7 +28,6 @@ export const isCollected = (params) => {
   return new Promise((resolve, reject) => {
     let isCollected = false;
     if (params.data.array.length > 0) {
-      console.log('Jin ru')
       isCollected = Realm.objects('Subject').filtered(`id=${params.data.array[params.index].id}`).length > 0;
       resolve(isCollected)
     } else {
@@ -50,5 +49,25 @@ export const writeToWrong = ({id, title, type, content}) => {
       resolve(true)
     });
     reject('写入错题集出错')
+  });
+}
+
+//收藏或取消收藏题
+export const setCollectSubjeact = ({id, title, type, data}) => {
+  return new Promise((resolve) => {
+    let temp = Realm.objects('Subject').filtered(`id=${id}`);
+    Realm.write(() => {
+        if (temp.length === 0) {
+          Realm.create('Subject', {
+              id, title, type,
+              content: JSON.stringify(data)
+            }
+          )
+        } else {
+          Realm.delete(temp[0]);
+        }
+        resolve(true)
+      }
+    );
   });
 }
