@@ -1,6 +1,6 @@
-
 import {createAction} from "../utils/index";
 import * as testServices from "../services/test";
+import ToastUtil from "../utils/ToastUtil";
 
 var data = {
   array: [],
@@ -24,7 +24,13 @@ export default {
     show: false,
   },
   reducers: {
-    setData(state, {payload}){
+    setShow(state,{payload}){
+      return{
+        ...state,
+        show:payload.show,
+      }
+    },
+    setData(state, {payload}) {
       return {
         ...state,
         show: true,
@@ -32,15 +38,15 @@ export default {
         dataSource: payload.data.array,
       }
     },
-    clearData(state,{payload}){
+    clearData(state, {payload}) {
       return {
         ...state,
         showAnswer: false,
         modelVisible: false,
-        currentNum:1,
+        currentNum: 1,
       }
     },
-    itemSelected(state, {payload}){
+    itemSelected(state, {payload}) {
       return {
         ...state,
         data: payload.data,
@@ -48,7 +54,7 @@ export default {
         dataSource: payload.dataSource
       }
     },
-    pageChange(state, {payload}){
+    pageChange(state, {payload}) {
       return {
         ...state,
         type: payload.type,
@@ -57,19 +63,19 @@ export default {
         isCollected: payload.isCollected,
       }
     },
-    setAnswerCard(state,{payload}){
-      return{
+    setAnswerCard(state, {payload}) {
+      return {
         ...state,
-        modelVisible:payload.modelVisible
+        modelVisible: payload.modelVisible
       }
     },
-    changeCollectStatus(state, {payload}){
+    changeCollectStatus(state, {payload}) {
       return {
         ...state,
         isCollected: payload.isCollected
       }
     },
-    answerPress(state, {payload}){
+    answerPress(state, {payload}) {
       let data = state.data;
       data.array[state.currentNum - 1].showAnswer = !data.array[state.currentNum - 1].showAnswer;
       return {
@@ -82,7 +88,7 @@ export default {
   },
   effects: {
     //获取试题数据
-    *getTestBySIDandDID({payload}, {call, put}){
+    * getTestBySIDandDID({payload}, {call, put}) {
       let data = yield call(testServices.getTestBySIdAndId, {
         subjectId: payload.subjectId,
         directoryId: payload.directoryId
@@ -90,12 +96,12 @@ export default {
       data = testServices.changeResultData(data);
       yield put(createAction('setData')({data}))
       if (data.array.length > 0) {
-          let isCollected = yield call(testServices.isCollected, {data, index: 0})
-          yield put(createAction('changeCollectStatus')({isCollected}))
+        let isCollected = yield call(testServices.isCollected, {data, index: 0})
+        yield put(createAction('changeCollectStatus')({isCollected}))
       }
     },
     //选择答案
-    *onItemClicked({payload}, {call, put, select}){
+    * onItemClicked({payload}, {call, put, select}) {
       let temp = yield select(state => state.test);
       temp.data.array[temp.currentNum - 1].showAnswer = true;
       temp.data.array[temp.currentNum - 1].status = payload.status === true ? 1 : 2;
@@ -106,7 +112,7 @@ export default {
         yield call(testServices.writeToWrong, {id, title, type, content});
       }
     },
-    *onPageChanged({payload}, {select, call, put}){
+    * onPageChanged({payload}, {select, call, put}) {
       let test = yield select(state => state.test);
       let type;
       if (payload.index < test.data.one) {
@@ -124,14 +130,39 @@ export default {
         isCollected,
       }))
     },
-    *onCollectPress({payload}, {select, call, put}){
+    * onCollectPress({payload}, {select, call, put}) {
       let temp = yield select(state => state.test);
       let data = temp.data.array[temp.currentNum - 1];
       let {id, title, type} = data;
       yield put(createAction('changeCollectStatus')({isCollected: !temp.isCollected}))
       yield call(testServices.setCollectSubjeact, {id, title, type, data})
     },
-
-
-   }
+    * getOfflineData({payload}, {call, put}) {
+      try {
+        let data = yield call(testServices.getOfflineData, {
+          subjectId: payload.subjectId,
+          directoryId: payload.directoryId
+        })
+        yield put(createAction('setData')({data}))
+        if (data.array.length > 0) {
+          let isCollected = yield call(testServices.isCollected, {data, index: 0})
+          yield put(createAction('changeCollectStatus')({isCollected}))
+        }
+      } catch (e) {
+        ToastUtil.showShort(e);
+      }
+    },
+    * getLocalData({payload}, {call, put}) {
+      try {
+        let data = yield call(testServices.getLocalData, {tableName: payload.tableName})
+        yield put(createAction('setData')({data}))
+        if (data.array.length > 0) {
+          let isCollected = yield call(testServices.isCollected, {data, index: 0})
+          yield put(createAction('changeCollectStatus')({isCollected}))
+        }
+      } catch (e) {
+        ToastUtil.showShort(e);
+      }
+    }
+  },
 }

@@ -33,6 +33,45 @@ class Test extends React.Component {
     this.onCardItemSelected=this.onCardItemSelected.bind(this);
     this.reStart=this.reStart.bind(this);
     this.onAnswerPress=this.onAnswerPress.bind(this);
+    this.getOffline=this.getOffline.bind(this);
+    props.dispatch(createAction('test/setShow')({show:false}))
+  }
+
+  componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
+      this.props.dispatch(createAction('test/clearData')())
+      switch (this.props.navigation.state.params.type) {
+        case 'exercise':
+          this.getData();
+          break;
+        case 'history':
+          this.getData();
+          break;
+        case 'offline':
+          this.getOffline();
+          break;
+        case 'wrong':
+          this.getLocalData('Wrong');
+          break;
+        case 'collect':
+          this.getLocalData('Subject');
+          break;
+      }
+    })
+  }
+
+  //获取本地数据
+  getLocalData(tableName) {
+    this.props.dispatch(createAction('test/getLocalData')({tableName}))
+  }
+
+  //获取离线题库
+  getOffline() {
+    this.props.dispatch(createAction('test/getOfflineData')({
+      subjectId: this.props.navigation.state.params.subjectId,
+      directoryId: this.props.navigation.state.params.directoryId
+    }));
+    // this.tabView.goToPage(this.props.currentNum);
   }
 
   //标题
@@ -126,15 +165,6 @@ class Test extends React.Component {
     this.props.dispatch(createAction('test/answerPress')())
   }
 
-  componentDidMount() {
-    InteractionManager.runAfterInteractions(() => {
-      switch (this.props.navigation.state.params.type) {
-        case 'exercise':
-          this.getData();
-          break;
-      }
-    })
-  }
 
   render() {
     return (

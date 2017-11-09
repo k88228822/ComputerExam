@@ -62,7 +62,7 @@ class Home extends Component {
         break;
       case 2://最新机考模拟题
         this.props.navigation.navigate(
-          'History', {
+          'HistoryTest', {
             isSubject: false
           }
         );

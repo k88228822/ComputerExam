@@ -71,3 +71,39 @@ export const setCollectSubjeact = ({id, title, type, data}) => {
     );
   });
 }
+
+export const getOfflineData = ({subjectId, directoryId}) => {
+  return new Promise((resolve, reject) => {
+    let temp = Realm.objects('Download').filtered(`subjectId= ${subjectId} and directoryId = ${directoryId}`);
+    if (temp.length === 0) {
+      reject('数据丢失,没有找到...');
+    } else {
+      let list = changeResultData(JSON.parse(temp[0].content));
+      resolve(list)
+    }
+  });
+}
+
+export const getLocalData = ({tableName}) => {
+  return new Promise((resolve, reject) => {
+    let a=tableName;
+    let temp = Realm.objects(tableName).sorted('type');
+    if (temp.length <= 0) reject('没有找到数据')
+    let list = {array: [], one: 0, two: 0, three: 0, total: temp.length};
+    temp.map((item) => {
+      list.array.push(JSON.parse(item.content));
+      switch (item.type % 10) {
+        case 1:
+          list.one++;
+          break;
+        case 2:
+          list.two++;
+          break;
+        case 3:
+          list.three++;
+          break;
+      }
+    });
+    resolve(list);
+  })
+}
