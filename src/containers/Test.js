@@ -62,6 +62,7 @@ class Test extends React.Component {
 
   //获取本地数据
   getLocalData(tableName) {
+    this.props.dispatch(createAction('test/clearData')())
     this.props.dispatch(createAction('test/getLocalData')({tableName}))
   }
 
@@ -111,7 +112,19 @@ class Test extends React.Component {
 
   //点击答题卡按钮
   onAnswerCardPress() {
-    this.props.dispatch(createAction('test/setAnswerCard')({modelVisible: true}))
+    // this.props.dispatch(createAction('test/setAnswerCard')({modelVisible: true}))
+    this.props.navigation.navigate('AnswerCard',{
+      callback: (eventType, index) => {
+        switch (eventType){
+          case 'itemSelect':
+            this.onCardItemSelected(index);
+            break;
+          case 'onRestartPress':
+            this.reStart();
+            break;
+        }
+      },
+    })
   }
 
   //关闭答提卡回调

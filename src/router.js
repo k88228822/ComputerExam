@@ -21,6 +21,7 @@ import Test from "./containers/Test";
 import HistoryTest from "./containers/HistoryTest";
 import Offline from "./containers/Offline";
 import Rank from "./containers/Rank";
+import AnswerCard from "./components/test/AnswerCard";
 
 const BankIcon = require('./images/main/questions_bank.png');
 const BankSelectedIcon = require('./images/main/questions_bank_selected.png');
@@ -142,6 +143,7 @@ const AppNavigator = StackNavigator(
     HistoryTest:{screen:HistoryTest},
     Offline:{screen:Offline},
     Rank:{screen:Rank},
+    AnswerCard:{screen:AnswerCard},
   },
   {
     headerMode: 'none',

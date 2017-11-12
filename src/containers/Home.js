@@ -1,15 +1,12 @@
 import React, { Component } from 'react'
 import {InteractionManager,StyleSheet, View, Image, Button, ScrollView} from 'react-native'
 import { connect } from 'react-redux'
-import { NavigationActions } from '../utils'
 import MyStatusBar from "../components/common/MyStatusBar";
 import HomeHead from "../components/home/HomeHead";
 import {createAction} from "../utils/index";
 import Swiper from "../components/home/Swiper";
 import HomeGridView from "../components/home/HomeGridView";
 import SelectModal from "../components/home/SelectModal";
-import LocalStorage from "../common/LocalStorage";
-import {STORAGE_SELECT_NAME} from "../common/Constants";
 import ScreenSize from "../utils/index";
 
 const itembgs = [
@@ -130,12 +127,12 @@ class Home extends Component {
           onHeaderRightPress={this.onHeaderRightPress}
         />
 
-        {/*<ScrollView*/}
-          {/*removeClippedSubviews={false}*/}
-          {/*showsVerticalScrollIndicator={false}*/}
-          {/*style={styles.container}>*/}
+        <ScrollView
+          removeClippedSubviews={false}
+          showsVerticalScrollIndicator={false}
+          style={styles.container}>
 
-          <Swiper urls={this.props.urls}/>
+          <Swiper imageUrls={this.props.urls}/>
 
           <HomeGridView
             data={itembgs}
@@ -144,7 +141,7 @@ class Home extends Component {
             onItemClick={this.onContentItemClick}
           />
 
-        {/*</ScrollView>*/}
+        </ScrollView>
 
         <SelectModal
           onClose={this.onSelectModalClose}
@@ -159,6 +156,14 @@ class Home extends Component {
 }
 
 const styles = StyleSheet.create({
+  modelView:{
+    position:'absolute',
+    left:0,
+    top:0,
+    width:ScreenSize.width,
+    height:ScreenSize.height,
+    backgroundColor:'#ffffff',
+  },
   container: {
     flex: 1,
     backgroundColor:'#ffffff',

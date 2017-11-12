@@ -19,7 +19,7 @@ const app = dva({
 const App = app.start(<Router />)
 persistStore(app.getStore(), {
   storage: AsyncStorage,
-  blacklist: ['router','test'],
+  blacklist: ['router'],
 })
 
 AppRegistry.registerComponent('ComputerExam', () => App)

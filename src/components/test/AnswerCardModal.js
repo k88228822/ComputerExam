@@ -13,7 +13,7 @@ function AnswerCardModal(props) {
 
   return (
     <Modal
-      style={{height:ScreenSize.height,width:ScreenSize.width}}
+      style={{height:ScreenSize.height,width:ScreenSize.width,backgroundColor:'#ffffff'}}
       animationType={'slide'}
       transparent={false}
       visible={props.isVisible}
