@@ -20,6 +20,7 @@ import BookExercise from "./containers/BookExercise";
 import Test from "./containers/Test";
 import HistoryTest from "./containers/HistoryTest";
 import Offline from "./containers/Offline";
+import Rank from "./containers/Rank";
 
 const BankIcon = require('./images/main/questions_bank.png');
 const BankSelectedIcon = require('./images/main/questions_bank_selected.png');
@@ -139,6 +140,7 @@ const AppNavigator = StackNavigator(
     Test:{screen:Test},
     HistoryTest:{screen:HistoryTest},
     Offline:{screen:Offline},
+    Rank:{screen:Rank},
   },
   {
     headerMode: 'none',

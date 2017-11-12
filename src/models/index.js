@@ -11,6 +11,7 @@ import bookExercise from "./bookExercise";
 import test from "./test";
 import history from './history';
 import offline from "./offline";
+import rank from "./rank";
 
 export default models = [
   router,
@@ -22,4 +23,5 @@ export default models = [
   test,
   history,
   offline,
+  rank,
 ]

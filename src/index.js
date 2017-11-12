@@ -1,9 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React from 'react'
 import { AppRegistry, AsyncStorage } from 'react-native'
 import { persistStore, autoRehydrate } from 'redux-persist'
