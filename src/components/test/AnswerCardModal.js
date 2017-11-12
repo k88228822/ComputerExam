@@ -7,11 +7,13 @@ import AnswerCardHead from "./AnswerCardHead";
 import AnswerCardSelect from "./AnswerCardSelect";
 import PropTypes from 'prop-types';
 import AnswerCardBottom from "./AnswerCardBottom";
+import ScreenSize from "../../utils/index";
 
 function AnswerCardModal(props) {
 
   return (
     <Modal
+      style={{height:ScreenSize.height,width:ScreenSize.width}}
       animationType={'slide'}
       transparent={false}
       visible={props.isVisible}

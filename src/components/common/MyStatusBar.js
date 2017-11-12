@@ -4,6 +4,7 @@
 import React from 'react';
 import {View,Platform,StatusBar} from "react-native";
 import PropTypes from 'prop-types';
+import ScreenSize from "../../utils/index";
 
 function MyStatusBar(props) {
   return (

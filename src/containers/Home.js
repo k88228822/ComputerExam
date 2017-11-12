@@ -10,6 +10,7 @@ import HomeGridView from "../components/home/HomeGridView";
 import SelectModal from "../components/home/SelectModal";
 import LocalStorage from "../common/LocalStorage";
 import {STORAGE_SELECT_NAME} from "../common/Constants";
+import ScreenSize from "../utils/index";
 
 const itembgs = [
   require('../images/question/exercise.png'),
@@ -129,10 +130,10 @@ class Home extends Component {
           onHeaderRightPress={this.onHeaderRightPress}
         />
 
-        <ScrollView
-          removeClippedSubviews={false}
-          showsVerticalScrollIndicator={false}
-          style={styles.container}>
+        {/*<ScrollView*/}
+          {/*removeClippedSubviews={false}*/}
+          {/*showsVerticalScrollIndicator={false}*/}
+          {/*style={styles.container}>*/}
 
           <Swiper urls={this.props.urls}/>
 
@@ -143,7 +144,7 @@ class Home extends Component {
             onItemClick={this.onContentItemClick}
           />
 
-        </ScrollView>
+        {/*</ScrollView>*/}
 
         <SelectModal
           onClose={this.onSelectModalClose}
@@ -160,8 +161,9 @@ class Home extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:'#ffffff'
-  },
+    backgroundColor:'#ffffff',
+    height:ScreenSize.height,
+},
   icon: {
     width: 20,
     height: 20,

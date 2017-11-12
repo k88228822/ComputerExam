@@ -65,12 +65,12 @@ const HomeNavigator = TabNavigator(
     },
   },
   {
-    animationEnabled: false, // 切换页面时不显示动画
+    animationEnabled: true, // 切换页面时是否显示动画
     tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom', // 显示在底端，android 默认是显示在页面顶端的
-    swipeEnabled: false, // 禁止左右滑动
+    swipeEnabled: true, //左右滑动
     backBehavior: 'none', // 按 back 键是否跳转到第一个 Tab， none 为不跳转
-    mode: 'card',
+    // mode: 'card',
     tabBarOptions: {
       activeTintColor: '#3c4a55', // 文字和图片选中颜色
       inactiveTintColor: '#505c65', // 文字和图片默认颜色
@@ -90,24 +90,75 @@ const HomeNavigator = TabNavigator(
       iconStyle: {
         marginBottom: 1,
         marginTop: 0,
+        width:50,
       },
     }
   }
 )
 
-const MainNavigator = StackNavigator(
+// const MainNavigator = StackNavigator(
+//   {
+//     HomeNavigator: {screen: HomeNavigator},
+//   },
+//   {
+//     headerMode: 'none',
+//     mode: 'modal',
+//     navigationOptions: {
+//       gesturesEnabled: false,
+//     },
+//     transitionConfig: () => ({
+//       transitionSpec: {
+//         duration: 300,
+//         easing: Easing.out(Easing.poly(4)),
+//         timing: Animated.timing,
+//       },
+//       screenInterpolator: sceneProps => {
+//         const {layout, position, scene} = sceneProps
+//         const {index} = scene
+//
+//         const height = layout.initHeight
+//         const translateY = position.interpolate({
+//           inputRange: [index - 1, index, index + 1],
+//           outputRange: [height, 0, 0],
+//         })
+//
+//         const opacity = position.interpolate({
+//           inputRange: [index - 1, index - 0.99, index],
+//           outputRange: [0, 1, 1],
+//         })
+//
+//         return {opacity, transform: [{translateY}]}
+//       },
+//     }),
+//   }
+// )
+
+const AppNavigator = StackNavigator(
   {
-    HomeNavigator: {screen: HomeNavigator},
+    Main: {screen: HomeNavigator},
+    Login: {screen: Login},
+    BookExercise: {screen: BookExercise},
+    Test:{screen:Test},
+    HistoryTest:{screen:HistoryTest},
+    Offline:{screen:Offline},
+    Rank:{screen:Rank},
   },
   {
     headerMode: 'none',
-    mode: 'modal',
+    // mode: 'card',
     navigationOptions: {
       gesturesEnabled: false,
+      headerBackTitle: null,
+      headerTintColor: '#3c4a55',
+      showIcon: true,
     },
+    cardStyle: {opacity: null},
+    // transitionConfig: () => ({
+    //   screenInterpolator: CardStackStyleInterpolator.forHorizontal,
+    // }),
     transitionConfig: () => ({
       transitionSpec: {
-        duration: 300,
+        duration: 400,
         easing: Easing.out(Easing.poly(4)),
         timing: Animated.timing,
       },
@@ -128,32 +179,6 @@ const MainNavigator = StackNavigator(
 
         return {opacity, transform: [{translateY}]}
       },
-    }),
-  }
-)
-
-const AppNavigator = StackNavigator(
-  {
-    Main: {screen: MainNavigator},
-    Login: {screen: Login},
-    BookExercise: {screen: BookExercise},
-    Test:{screen:Test},
-    HistoryTest:{screen:HistoryTest},
-    Offline:{screen:Offline},
-    Rank:{screen:Rank},
-  },
-  {
-    headerMode: 'none',
-    mode: 'modal',
-    navigationOptions: {
-      gesturesEnabled: false,
-      headerBackTitle: null,
-      headerTintColor: '#3c4a55',
-      showIcon: true,
-    },
-    cardStyle: {opacity: null},
-    transitionConfig: () => ({
-      screenInterpolator: CardStackStyleInterpolator.forHorizontal,
     }),
   }
 )

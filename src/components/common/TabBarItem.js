@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {Image} from 'react-native';
+import {StyleSheet,Image, View} from 'react-native';
 import PropTypes from 'prop-types'
+import ScreenSize from "../../utils/index";
 
 function TabBarItem(props) {
   const selectedImage = props.selectedImage ? props.selectedImage : props.normalImage;
@@ -20,4 +21,14 @@ TabBarItem.propTypes = {
 }
 
 TabBarItem.defaultProps = {}
+
+const styles=StyleSheet.create({
+  container:{
+    width:ScreenSize.width/6 ,
+    height:30,
+  },
+  image:{
+
+  }
+})
 export default TabBarItem;

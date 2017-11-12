@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import {Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
 import ScreenSize, {System} from "../../utils/index";
 import MyListView from "../common/MyListView";
+import MyStatusBar from "../common/MyStatusBar";
 
 function SelectModal(props) {
 
@@ -58,6 +59,7 @@ function SelectModal(props) {
       visible={props.visible}
       maskClosable={false}
     >
+
       <View style={styles.container} activeOpacity={1} focusedOpacity={1}>
 
         <ImageBackground style={styles.bgImg} source={require('../../images/select/bg_test.png')}>
