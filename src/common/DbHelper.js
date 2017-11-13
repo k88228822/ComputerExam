@@ -48,7 +48,15 @@ const Download = {
   }
 }
 
-const realmDb = new Realm({schema: [User, Subject, Download, Wrong, ]});
+//搜索历史
+const SearchHistoy ={
+  name:'SearchHistory',
+  properties:{
+    key:{type:'string',default:''},
+  }
+}
+
+const realmDb = new Realm({schema: [User, Subject, Download, Wrong, SearchHistoy]});
 
 export default realmDb;
 

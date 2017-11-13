@@ -1,5 +1,6 @@
-
 import {createAction} from "../utils/index";
+import * as searchService from "../services/search";
+import ToastUtil from "../utils/ToastUtil";
 
 const data = [{name: '十分钟学会思维导图', img: 0},
   {name: '记忆术与思维导图(第二版)', img: 1},
@@ -13,23 +14,50 @@ export default {
     searchText: '',
     dataSource: data,
     showResult: false,
-    history: ['二叉树', '算法', '前序遍历', '空指针问题'],
+    history: [],
     recommend: [],
   },
 
   reducers: {
-    setTextAndResult(state,{payload}){
+    setTextAndResult(state, {payload}) {
+      return {
+        ...state,
+        searchText: payload.text,
+        showResult: payload.showResult
+      }
+    },
+    setHistory(state, {payload}) {
+      return {
+        ...state,
+        history: payload.history,
+      }
+    },
+    setRecommend(state,{payload}){
      return{
        ...state,
-       searchText:payload.text,
-       showResult:payload.showResult
+       recommend:payload.recommend,
      }
-    },
+    }
 
 
   },
 
   effects: {
+    * getSearchRecommend({payload}, {call, put}) {
+      try {
+      let recommend= yield call(searchService.searchRecommend, {total: 10})
+      yield put(createAction('setRecommend')({recommend}))
+      }catch (e){
+        ToastUtil.showShort(e);
+      }
+    },
+    * searchData() {
+
+    },
+    * addSearchHistory({payload},{call,put}){
+      
+    },
+
 
   },
 

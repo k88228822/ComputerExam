@@ -9,6 +9,7 @@ import ReturnButton from "../components/common/ReturnButton";
 import {NavigationActions} from 'react-navigation'
 import HeadView from "../components/common/HeadView";
 import MineDetail from "../components/rank/MineDetail";
+import RankList from "../components/rank/RankList";
 
 @connect(state => ({...state.rank}))
 class Rank extends React.Component {
@@ -53,6 +54,8 @@ class Rank extends React.Component {
           num={this.props.num}
           rank={this.props.rank}
         />
+
+        <RankList dataSource={this.props.dataSource}/>
 
       </View>
     )

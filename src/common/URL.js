@@ -28,6 +28,8 @@ export const MOCK_AND_OFFICIAL= `${BASE_URL}/subject/getIssueDirBySubjectIdAndKi
 //获取章节或者真题模拟题目下的全部题目
 export const MOCK_OR_OFFICIAL_TEST= `${BASE_URL}/subject/getQuestionGroup/By/SubIdAndDirId`;
 
+export const GET_SEARCH_RECOMMEND=`${BASE_URL}/subject/getRecommendSearchKeyWord`
+
 
 
 
