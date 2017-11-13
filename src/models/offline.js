@@ -12,7 +12,7 @@ export default {
     complete: false,
   },
   reducers: {
-    updateOfflineData(state, {payload}){
+    updateOfflineData(state, {payload}) {
       return {
         ...state,
         dataSource: payload.data,
@@ -22,9 +22,13 @@ export default {
 
   },
   effects: {
-    *getData({payload}, {call, put}){
-      let data = yield call(offlineService.getOfflineData)
-      yield put(createAction('updateOfflineData')({data}))
+    * getData({payload}, {call, put}) {
+      try {
+        let data = yield call(offlineService.getOfflineData)
+        yield put(createAction('updateOfflineData')({data}))
+      } catch (e) {
+
+      }
     },
 
   },

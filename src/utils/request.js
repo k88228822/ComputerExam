@@ -1,3 +1,6 @@
+import {NetInfo} from 'react-native'
+import ToastUtil from "./ToastUtil";
+
 function parseJSON(response) {
   return response.json();
 }
@@ -25,6 +28,11 @@ function checkData(data) {
 }
 
 export default function request(url, options) {
+  NetInfo.isConnected.fetch().done((isConnected) => {
+    if(!isConnected) {
+      return new Promise(reject=>reject('网络未连接'))
+    }
+  });
   return fetch(url, options)
     .then(checkStatus)
     .then(parseJSON)

@@ -29,12 +29,13 @@ class Test extends React.Component {
     this.goNextPage = this.goNextPage.bind(this);
     this.onCollectPress = this.onCollectPress.bind(this);
     this.onAnswerCardPress = this.onAnswerCardPress.bind(this);
-    this.onCloseAnswerCard=this.onCloseAnswerCard.bind(this);
-    this.onCardItemSelected=this.onCardItemSelected.bind(this);
-    this.reStart=this.reStart.bind(this);
-    this.onAnswerPress=this.onAnswerPress.bind(this);
-    this.getOffline=this.getOffline.bind(this);
-    props.dispatch(createAction('test/setShow')({show:false}))
+    this.onCloseAnswerCard = this.onCloseAnswerCard.bind(this);
+    this.onCardItemSelected = this.onCardItemSelected.bind(this);
+    this.reStart = this.reStart.bind(this);
+    this.onAnswerPress = this.onAnswerPress.bind(this);
+    this.getOffline = this.getOffline.bind(this);
+    props.dispatch(createAction('test/setShow')({show: false}))
+    // props.dispatch(createAction('test/setCurrentType')({currentType: this.props.navigation.state.params.type}))
   }
 
   componentDidMount() {
@@ -113,9 +114,9 @@ class Test extends React.Component {
   //点击答题卡按钮
   onAnswerCardPress() {
     // this.props.dispatch(createAction('test/setAnswerCard')({modelVisible: true}))
-    this.props.navigation.navigate('AnswerCard',{
+    this.props.navigation.navigate('AnswerCard', {
       callback: (eventType, index) => {
-        switch (eventType){
+        switch (eventType) {
           case 'itemSelect':
             this.onCardItemSelected(index);
             break;
@@ -129,12 +130,12 @@ class Test extends React.Component {
 
   //关闭答提卡回调
   onCloseAnswerCard() {
-    this.props.dispatch(createAction('test/setAnswerCard')({modelVisible:false}))
+    this.props.dispatch(createAction('test/setAnswerCard')({modelVisible: false}))
   }
 
   //答题卡选中题号
   onCardItemSelected(index) {
-    this.props.dispatch(createAction('test/setAnswerCard')({modelVisible:false}))
+    this.props.dispatch(createAction('test/setAnswerCard')({modelVisible: false}))
     setTimeout(() => {
       this.scrollView.goToPage(index);
     }, 100);
@@ -170,7 +171,7 @@ class Test extends React.Component {
       ToastUtil.showShort('已经是第一题了哦');
       return;
     }
-    this.scrollView.goToPage(num-2)
+    this.scrollView.goToPage(num - 2)
   }
 
   //点击显示/隐藏答案
@@ -202,7 +203,7 @@ class Test extends React.Component {
           {
             this.props.show ?
               <Content
-                ref={content=>this.scrollView=content}
+                ref={content => this.scrollView = content}
                 style={{backgroundColor: 'red'}}
                 pageNum={this.props.currentNum}
                 dataSource={this.props.dataSource}

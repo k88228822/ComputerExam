@@ -16,6 +16,7 @@ export default {
     data: data,
     title: '1.1 结构化程序设计',
     type: '单选题',
+    currentType:'',
     currentNum: 1,
     dataSource: [],
     showAnswer: false,
@@ -24,6 +25,12 @@ export default {
     show: false,
   },
   reducers: {
+    setCurrentType(state,{payload}){
+      return{
+        ...state,
+        currentType:payload.currentType,
+      }
+    },
     setShow(state,{payload}){
       return{
         ...state,
@@ -89,53 +96,69 @@ export default {
   effects: {
     //获取试题数据
     * getTestBySIDandDID({payload}, {call, put}) {
-      let data = yield call(testServices.getTestBySIdAndId, {
-        subjectId: payload.subjectId,
-        directoryId: payload.directoryId
-      })
-      data = testServices.changeResultData(data);
-      yield put(createAction('setData')({data}))
-      if (data.array.length > 0) {
-        let isCollected = yield call(testServices.isCollected, {data, index: 0})
-        yield put(createAction('changeCollectStatus')({isCollected}))
+      try {
+        let data = yield call(testServices.getTestBySIdAndId, {
+          subjectId: payload.subjectId,
+          directoryId: payload.directoryId
+        })
+        data = testServices.changeResultData(data);
+        yield put(createAction('setData')({data}))
+        if (data.array.length > 0) {
+          let isCollected = yield call(testServices.isCollected, {data, index: 0})
+          yield put(createAction('changeCollectStatus')({isCollected}))
+        }
+      }catch(e){
+        ToastUtil.showShort(e)
       }
     },
     //选择答案
     * onItemClicked({payload}, {call, put, select}) {
-      let temp = yield select(state => state.test);
-      temp.data.array[temp.currentNum - 1].showAnswer = true;
-      temp.data.array[temp.currentNum - 1].status = payload.status === true ? 1 : 2;
-      yield put(createAction('itemSelected')({data: temp.data, dataSource: temp.data.array}))
-      if (!payload.status) {
-        let content = temp.data.array[temp.currentNum - 1];
-        let {id, title, type} = content;
-        yield call(testServices.writeToWrong, {id, title, type, content});
+      try {
+        let temp = yield select(state => state.test);
+        temp.data.array[temp.currentNum - 1].showAnswer = true;
+        temp.data.array[temp.currentNum - 1].status = payload.status === true ? 1 : 2;
+        yield put(createAction('itemSelected')({data: temp.data, dataSource: temp.data.array}))
+        if (!payload.status) {
+          let content = temp.data.array[temp.currentNum - 1];
+          let {id, title, type} = content;
+          yield call(testServices.writeToWrong, {id, title, type, content});
+        }
+      }catch(e){
+        ToastUtil.showShort(e);
       }
     },
     * onPageChanged({payload}, {select, call, put}) {
-      let test = yield select(state => state.test);
-      let type;
-      if (payload.index < test.data.one) {
-        type = '单选题';
-      } else if (payload.index < (test.data.two + test.data.one)) {
-        type = '填空题';
-      } else {
-        type = '操作题';
+      try {
+        let test = yield select(state => state.test);
+        let type;
+        if (payload.index < test.data.one) {
+          type = '单选题';
+        } else if (payload.index < (test.data.two + test.data.one)) {
+          type = '填空题';
+        } else {
+          type = '操作题';
+        }
+        let isCollected = yield call(testServices.isCollected, {data: test.data, index: payload.index})
+        yield put(createAction('pageChange')({
+          type,
+          currentNum: (payload.index + 1),
+          showAnswer: test.data.array[payload.index].showAnswer,
+          isCollected,
+        }))
+      }catch(e){
+        ToastUtil.showShort(e);
       }
-      let isCollected = yield call(testServices.isCollected, {data: test.data, index: payload.index})
-      yield put(createAction('pageChange')({
-        type,
-        currentNum: (payload.index + 1),
-        showAnswer: test.data.array[payload.index].showAnswer,
-        isCollected,
-      }))
     },
     * onCollectPress({payload}, {select, call, put}) {
-      let temp = yield select(state => state.test);
-      let data = temp.data.array[temp.currentNum - 1];
-      let {id, title, type} = data;
-      yield put(createAction('changeCollectStatus')({isCollected: !temp.isCollected}))
-      yield call(testServices.setCollectSubjeact, {id, title, type, data})
+      try {
+        let temp = yield select(state => state.test);
+        let data = temp.data.array[temp.currentNum - 1];
+        let {id, title, type} = data;
+        yield put(createAction('changeCollectStatus')({isCollected: !temp.isCollected}))
+        yield call(testServices.setCollectSubjeact, {id, title, type, data})
+      }catch(e){
+        ToastUtil.showShort(e);
+      }
     },
     * getOfflineData({payload}, {call, put}) {
       try {

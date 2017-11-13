@@ -3,6 +3,7 @@
  */
 import {getBannerList, getDays, setSubject} from "../services/home";
 import {createAction} from "../utils/index";
+import ToastUtil from "../utils/ToastUtil";
 
 const selectData = [
   {img: require('../images/select/icon_c.png'), name: 'C 语言程序设计'},
@@ -54,24 +55,35 @@ export default {
   effects: {
 
     * getBannerList({payload}, {call, put}) {
+      try {
+        const urls = yield call(getBannerList)
 
-      const urls = yield call(getBannerList)
-
-      if (urls.length > 0) {
-        yield put(createAction('setUrls')({urls}))
+        if (urls.length > 0) {
+          yield put(createAction('setUrls')({urls}))
+        }
+      }catch(e){
+        ToastUtil.showShort(e);
       }
 
     },
 
     * setSubject({payload}, {call, put}){
-      yield call(setSubject, {data: payload.data, index: payload.index})
-      yield put(createAction('setSelectSubject')({title: payload.data, subjectId: parseInt(payload.index) + 1}))
+      try {
+        yield call(setSubject, {data: payload.data, index: payload.index})
+        yield put(createAction('setSelectSubject')({title: payload.data, subjectId: parseInt(payload.index) + 1}))
+      }catch(e){
+        ToastUtil.showShort(e);
+      }
     },
 
     * getDays({payload},{call,put}){
-      let res=yield call(getDays)
-      let time=Array.from([res.one,res.two,res.three])
-      yield put(createAction('setDays')({time}))
+      try {
+        let res = yield call(getDays)
+        let time = Array.from([res.one, res.two, res.three])
+        yield put(createAction('setDays')({time}))
+      }catch (e){
+        ToastUtil.showShort(e);
+      }
     }
 
   },

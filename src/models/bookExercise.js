@@ -1,6 +1,7 @@
 import {getLocalSubjectId, getOfficialBook} from "../services/home";
 import {createAction} from "../utils/index";
 import {NavigationActions} from "react-navigation";
+import ToastUtil from "../utils/ToastUtil";
 
 export default {
   namespace: 'bookExercise',
@@ -29,12 +30,16 @@ export default {
 
   effects: {
     * getOfficialBook({payload}, {call, put}) {
-      let id= yield call(getLocalSubjectId)
-      id= id===null? 1:id;
-      let book = yield call(getOfficialBook, {id})
+      try {
+        let id = yield call(getLocalSubjectId)
+        id = id === null ? 1 : id;
+        let book = yield call(getOfficialBook, {id})
 
-      yield put(createAction('setOfficialBook')({...book}));
-      yield put(createAction('setShow')({show: true}))
+        yield put(createAction('setOfficialBook')({...book}));
+        yield put(createAction('setShow')({show: true}))
+      }catch(e){
+        ToastUtil.showShort(e);
+      }
     },
   },
 }

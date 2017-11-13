@@ -59,6 +59,7 @@ function SelectModal(props) {
       visible={props.visible}
       maskClosable={false}
     >
+      <MyStatusBar hidden={true}/>
 
       <View style={styles.container} activeOpacity={1} focusedOpacity={1}>
 

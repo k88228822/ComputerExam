@@ -85,34 +85,45 @@ export default {
     },
 
     * upDateData({payload}, {call, put}) {
-      let data = yield call(historyService.upDateData, {res: _.cloneDeep(payload.data), selected: payload.selected})
-      yield put(createAction('changeData')({data}))
+      try {
+        let data = yield call(historyService.upDateData, {res: _.cloneDeep(payload.data), selected: payload.selected})
+        yield put(createAction('changeData')({data}))
+      }catch(e){
+        ToastUtil.showShort(e);
+      }
     },
 
     * onDownloadPress({payload}, {select, call, put}) {
-      let history = yield  select(state => state.history)
-      let data = historyService.changeDataStatus(history.data);
-      yield put(createAction('setShowReverse')())
-      yield put(createAction('changeData')({data}))
+      try {
+        let history = yield  select(state => state.history)
+        let data = historyService.changeDataStatus(history.data);
+        yield put(createAction('setShowReverse')())
+        yield put(createAction('changeData')({data}))
+      }catch(e){
+        ToastUtil.showShort(e);
+      }
     },
 
     * downloadData({payload}, {select, call, put}) {
+      try {
+        let history = yield select(state => state.history);
 
-      let history = yield select(state => state.history);
+        if (history.data[payload.index].status === 'normal') {
+          let res = yield call(historyService.downloadData, {
+            subjectId: history.data[payload.index].subjectId, directoryId: history.data[payload.index].id
+          })
 
-      if (history.data[payload.index].status === 'normal') {
-        let res = yield call(historyService.downloadData, {
-          subjectId: history.data[payload.index].subjectId, directoryId: history.data[payload.index].id
-        })
+          yield put(createAction('setFinished')({finished: true}))
 
-        yield put(createAction('setFinished')({finished: true}))
-
-        yield call(historyService.addToDownloadDb, {
-          subjectId: history.data[payload.index].subjectId,
-          directoryId: history.data[payload.index].id,
-          title: history.data[payload.index].title,
-          content: JSON.stringify(res)
-        })
+          yield call(historyService.addToDownloadDb, {
+            subjectId: history.data[payload.index].subjectId,
+            directoryId: history.data[payload.index].id,
+            title: history.data[payload.index].title,
+            content: JSON.stringify(res)
+          })
+        }
+      }catch (e){
+        ToastUtil.showShort(e);
       }
 
     },
@@ -145,8 +156,12 @@ export default {
     },
 
     * downloadTest({payload}, {put}) {
-      yield put(createAction('downloadData')({...payload}));
-      yield put(createAction('downloadTime')({...payload}));
+      try {
+        yield put(createAction('downloadData')({...payload}));
+        yield put(createAction('downloadTime')({...payload}));
+      }catch(e){
+        ToastUtil.showShort(e);
+      }
     }
 
   },

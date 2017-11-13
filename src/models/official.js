@@ -1,5 +1,6 @@
 import * as Official from "../services/official";
 import {createAction} from "../utils/index";
+import ToastUtil from "../utils/ToastUtil";
 
 export default {
   namespace: 'official',
@@ -18,8 +19,12 @@ export default {
   },
   effects: {
     *getData({payload},{call,put}){
-      let data=yield call(Official.getData)
-      yield put(createAction('setData')({data}));
+      try {
+        let data = yield call(Official.getData)
+        yield put(createAction('setData')({data}));
+      }catch(e){
+        ToastUtil.showShort(e);
+      }
     }
   },
 }
